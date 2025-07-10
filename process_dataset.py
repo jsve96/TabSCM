@@ -157,7 +157,10 @@ def process_data(name):
 
     data_path = info['data_path']
     if info['file_type'] == 'csv':
-        data_df = pd.read_csv(data_path, header = info['header'])
+        if name == 'early_diab':
+             data_df = pd.read_csv(data_path, header =0,names=info['column_names'])
+        else:
+            data_df = pd.read_csv(data_path, header = info['header'])
 
     elif info['file_type'] == 'xls':
         data_df = pd.read_excel(data_path, sheet_name='Data', header=1)
@@ -199,7 +202,6 @@ def process_data(name):
 
         num_train = int(num_data*0.9)
         num_test = num_data - num_train
-
         train_df, test_df, seed = train_val_test_split(data_df, cat_columns, num_train, num_test)
     
 
@@ -212,25 +214,25 @@ def process_data(name):
     
     for col_idx in num_col_idx:
         col_info[col_idx] = {}
-        col_info['type'] = 'numerical'
-        col_info['max'] = float(train_df[col_idx].max())
-        col_info['min'] = float(train_df[col_idx].min())
+        col_info[col_idx]['type'] = 'numerical'
+        col_info[col_idx]['max'] = float(train_df[col_idx].max())
+        col_info[col_idx]['min'] = float(train_df[col_idx].min())
      
     for col_idx in cat_col_idx:
         col_info[col_idx] = {}
-        col_info['type'] = 'categorical'
-        col_info['categorizes'] = list(set(train_df[col_idx]))    
+        col_info[col_idx]['type'] = 'categorical'
+        col_info[col_idx]['categorizes'] = list(set(train_df[col_idx]))    
 
     for col_idx in target_col_idx:
         if info['task_type'] == 'regression':
             col_info[col_idx] = {}
-            col_info['type'] = 'numerical'
-            col_info['max'] = float(train_df[col_idx].max())
-            col_info['min'] = float(train_df[col_idx].min())
+            col_info[col_idx]['type'] = 'numerical'
+            col_info[col_idx]['max'] = float(train_df[col_idx].max())
+            col_info[col_idx]['min'] = float(train_df[col_idx].min())
         else:
             col_info[col_idx] = {}
-            col_info['type'] = 'categorical'
-            col_info['categorizes'] = list(set(train_df[col_idx]))      
+            col_info[col_idx]['type'] = 'categorical'
+            col_info[col_idx]['categorizes'] = list(set(train_df[col_idx]))      
 
     info['column_info'] = col_info
 
@@ -345,7 +347,7 @@ if __name__ == "__main__":
     if args.dataname:
         process_data(args.dataname)
     else:
-        for name in ['adult', 'default', 'shoppers', 'magic', 'beijing', 'news']:    
+        for name in ['adult', 'default', 'shoppers', 'magic', 'beijing', 'news','early_diab','heloc','loan']:    
             process_data(name)
 
         

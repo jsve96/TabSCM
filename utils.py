@@ -7,16 +7,20 @@ def execute_function(method, mode):
     mode = 'main' if mode == 'train' else 'sample'
 
     if method == 'vae':
-        module_name = f"tabsyn.vae.main"
-    elif method == 'tabsyn':
-        module_name = f"tabsyn.{mode}"
+        module_name = f"baselines.tabsyn.vae.main"
+   # elif method == 'tabsyn':
+       # module_name = f"baselines.tabsyn.{mode}"
     elif method == 'tabddpm':
         module_name = f"baselines.tabddpm.main_train" if mode == 'main' else f"baselines.tabddpm.main_sample"
+    elif method == 'tabscm':
+        module_name = f"tabscm.{mode}"
     else:
         module_name = f"baselines.{method}.{mode}"
 
     try:
+        print('import moduels')
         train_module = importlib.import_module(module_name)
+
         train_function = getattr(train_module, 'main')
     except ModuleNotFoundError:
         print(f"Module {module_name} not found.")
@@ -32,7 +36,7 @@ def get_args():
     # General configs
     parser.add_argument('--dataname', type=str, default='adult', help='Name of dataset.')
     parser.add_argument('--mode', type=str, default='train', help='Mode: train or sample.')
-    parser.add_argument('--method', type=str, default='tabsyn', help='Method: tabsyn or baseline.')
+    parser.add_argument('--method', type=str, default='tabscm', help='Method: tabscm or baseline.')
     parser.add_argument('--gpu', type=int, default=0, help='GPU index.')
 
 
@@ -145,7 +149,12 @@ def get_args():
     # configs for sampling
     parser.add_argument('--save_path', type=str, default=None, help='Path to save synthetic data.')
     parser.add_argument('--steps', type=int, default=50, help='NFEs.')
-    
+
+    # configs for training TabSCM
+    parser.add_argument('--version', type=str, default='medium')
+    parser.add_argument('--cd_alg', type=str,default='pc')
+    parser.add_argument('--n_dag',type=int,default=1)
+
     args = parser.parse_args()
 
     return args
