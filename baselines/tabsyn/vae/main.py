@@ -12,7 +12,7 @@ from tqdm import tqdm
 import json
 import time
 
-from tabsyn.vae.model import Model_VAE, Encoder_model, Decoder_model
+from baselines.tabsyn.vae.model import Model_VAE, Encoder_model, Decoder_model
 from utils_train import preprocess, TabularDataset
 
 warnings.filterwarnings('ignore')
@@ -112,7 +112,7 @@ def main(args):
     pre_decoder.eval()
 
     optimizer = torch.optim.Adam(model.parameters(), lr=LR, weight_decay=WD)
-    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=10, verbose=True)
+    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=10)
 
     num_epochs = 4000
     best_train_loss = float('inf')

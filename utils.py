@@ -19,6 +19,7 @@ def execute_function(method, mode):
 
     try:
         print('import moduels')
+        print(f"Trying to import: {module_name}")
         train_module = importlib.import_module(module_name)
 
         train_function = getattr(train_module, 'main')

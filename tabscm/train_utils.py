@@ -79,8 +79,8 @@ def check_missing_node(dag,df):
 def infer_casual_graph(data,method,alpha=0.01):
 
     if method =='pc':
-        cg = pc(data,alpha=0.01,ci_test=fisherz, verbose=False)
-        return cg
+        cg = pc(data,alpha=alpha,ci_test=fisherz, verbose=False)
+        return cg.G
     elif method == 'ges':
         Record = ges(data)
         return Record['G']
@@ -131,6 +131,7 @@ def process(df,info,name):
         info['n_classes'][0] = df.Age.max().astype('int')+1 
         info['num_col_idx'] = []
         info['cat_col_idx'].insert(0,0)
+        info['col_dtype'] = {0:'int'}
 
     elif name == 'beijing':
 
@@ -145,15 +146,64 @@ def process(df,info,name):
     elif name == 'adult':
         return None
 
+    return df,info,encoders,encoded_cols
 
 
 
 
+import os
+import json
+import pickle
+import joblib
 
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NpEncoder, self).default(obj)
 
+def save_scm(scm: dict, save_dir: str = "saved_scm", experiment: str = "default"):
+    os.makedirs(save_dir, exist_ok=True)
+    scm_meta = {}
 
-    
+    for node, model_entry in scm.items():
+        node_dir = os.path.join(save_dir, f"{experiment}_node_{node}")
+        os.makedirs(node_dir, exist_ok=True)
 
+        # Handle root node sampler (no parents)
+        if not isinstance(model_entry, tuple):
+            with open(os.path.join(node_dir, "sampler.pkl"), "wb") as f:
+                pickle.dump(model_entry, f)
+            scm_meta[node] = {
+                "model_type": "sampler",
+                "parents": [],
+                "model_path": os.path.join(f"{experiment}_node_{node}", "sampler.pkl"),
+                "n_classes": None,
+            }
+            continue
 
+        model, parents, _, n_classes = model_entry
 
-    return data,info,encoders,encoded_cols
+        if hasattr(model, "save") and callable(getattr(model, "save")):
+            # Save DiffusionRegressor
+            model.save(node_dir, node)
+            model_type = "diffusion"
+        else:
+            # Save XGBoost model
+            model.save_model(os.path.join(node_dir, "xgb_model.json"))
+            model_type = "xgb"
+
+        scm_meta[node] = {
+            "model_type": model_type,
+            "parents": parents,
+            "model_path": node_dir,
+            "n_classes": n_classes,
+        }
+
+    # Save metadata
+    with open(os.path.join(save_dir, f"{experiment}_scm_meta.json"), "w") as f:
+        json.dump(scm_meta, f, indent=4,cls=NpEncoder)
