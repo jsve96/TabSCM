@@ -83,7 +83,12 @@ if __name__ == '__main__':
 
 
     cat_real_data_oh = encoder.transform(cat_real_data_np).toarray()
+    print(cat_real_data_oh)
+    print(cat_real_data_np)
+
+    print(cat_syn_data_np)
     cat_syn_data_oh = encoder.transform(cat_syn_data_np).toarray()
+    print(cat_syn_data_oh)
     cat_test_data_oh = encoder.transform(cat_test_data_np).toarray()
 
     num_real_data_np = num_real_data_np / num_ranges
