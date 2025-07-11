@@ -162,6 +162,9 @@ def process_data(name):
         else:
             data_df = pd.read_csv(data_path, header = info['header'])
 
+            if name == 'loan':
+                data_df = data_df.drop(columns=['Id'])
+
     elif info['file_type'] == 'xls':
         data_df = pd.read_excel(data_path, sheet_name='Data', header=1)
         data_df = data_df.drop('ID', axis=1)

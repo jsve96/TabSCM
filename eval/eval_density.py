@@ -112,7 +112,7 @@ if __name__ == '__main__':
 
     shapes = qual_report.get_details(property_name='Column Shapes')
     trends = qual_report.get_details(property_name='Column Pair Trends')
-    coverages = diag_report.get_details('Coverage')
+    coverages = diag_report.get_details('Data Structure')
 
 
     shapes.to_csv(f'{save_dir}/shape.csv')

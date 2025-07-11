@@ -40,7 +40,7 @@ def main(args):
 
     exp_save =  f'{curr_dir}/models/{dataname}'
     loaded_scm = load_scm(f'{exp_save}/scm',device='cuda')
-    print(loaded_scm)
+    #print(loaded_scm)
     
     
     n_samples = info['train_num']
@@ -52,6 +52,11 @@ def main(args):
     #### need to postprocess samples ---> convert with encoder
     samples_df = pd.DataFrame(samples,columns=info['column_names'])
     print(samples_df.head())
+
+    for col in encoded_cols:
+        if col in encoders.keys():
+            print(f'Column: {col}')
+            samples_df.iloc[:,col] = encoders[col].inverse_transform(samples_df.iloc[:,col].astype('int'))
     samples_df.to_csv(save_path, index = False)
 
 

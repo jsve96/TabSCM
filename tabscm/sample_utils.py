@@ -33,7 +33,7 @@ def load_scm(load_dir: str, experiment: str = "default", device: str = "cpu"):
 
     scm = {}
     for node, meta in scm_meta.items():
-        print(node)
+        #print(node)
         model_type = meta["model_type"]
         parents = meta["parents"]
         n_classes = meta["n_classes"]
@@ -76,6 +76,10 @@ def load_scm(load_dir: str, experiment: str = "default", device: str = "cpu"):
 
         else:
             raise ValueError(f"Unknown model type: {model_type}")
-        print(f'{node} finished')
+        #print(f'{node} finished')
 
     return scm
+
+
+
+

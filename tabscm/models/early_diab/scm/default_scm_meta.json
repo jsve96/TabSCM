@@ -29,36 +29,9 @@
         "model_path": "default_node_12/sampler.pkl",
         "n_classes": null
     },
-    "6": {
-        "model_type": "xgb",
-        "parents": [
-            12
-        ],
-        "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_6",
-        "n_classes": 2
-    },
-    "11": {
-        "model_type": "xgb",
-        "parents": [
-            5,
-            6,
-            14
-        ],
-        "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_11",
-        "n_classes": 2
-    },
-    "9": {
-        "model_type": "xgb",
-        "parents": [
-            11
-        ],
-        "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_9",
-        "n_classes": 2
-    },
     "8": {
         "model_type": "xgb",
         "parents": [
-            9,
             12
         ],
         "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_8",
@@ -82,13 +55,13 @@
         "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_13",
         "n_classes": 2
     },
-    "2": {
+    "6": {
         "model_type": "xgb",
         "parents": [
-            3,
-            6
+            12,
+            13
         ],
-        "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_2",
+        "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_6",
         "n_classes": 2
     },
     "0": {
@@ -100,7 +73,26 @@
             14
         ],
         "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_0",
-        "n_classes": 75
+        "n_classes": 91
+    },
+    "2": {
+        "model_type": "xgb",
+        "parents": [
+            3,
+            6
+        ],
+        "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_2",
+        "n_classes": 2
+    },
+    "11": {
+        "model_type": "xgb",
+        "parents": [
+            5,
+            6,
+            14
+        ],
+        "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_11",
+        "n_classes": 2
     },
     "4": {
         "model_type": "xgb",
@@ -119,6 +111,14 @@
             3
         ],
         "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_16",
+        "n_classes": 2
+    },
+    "9": {
+        "model_type": "xgb",
+        "parents": [
+            11
+        ],
+        "model_path": "/home/sven/coding/python/TabSCM/tabscm/models/early_diab/scm/default_node_9",
         "n_classes": 2
     },
     "1": {

@@ -112,14 +112,17 @@ def process(df,info,name):
         N_CLASSES = {i: int(df[c].max()+1) for i,c in enumerate(df.columns)}
         info['col_dtype'] = {i:'int' for i in info['num_col_idx']}
         info['n_classes'] = N_CLASSES
+
+    if name == 'magic':
+        info['col_dtype'] = {i: df.dtypes[i] for i in info['num_col_idx']}
         
     elif name == 'loan':
-        N_CLASSES = {i: df[c].nunique() for i,c in enumerate(df.columns)}
+        N_CLASSES = {i: int(df[c].max()+1) for i,c in enumerate(df.columns)}#{i: df[c].nunique() for i,c in enumerate(df.columns)}
         info['n_classes'] = N_CLASSES
-        info['n_classes'][1] = info['n_classes'][1] +1
-        df['Age'] = df['Age'] - df['Age'].min()
-        df['CURRENT_HOUSE_YRS'] = df['CURRENT_HOUSE_YRS'] - df['CURRENT_HOUSE_YRS'].min()
-        df['CURRENT_JOB_YRS'] = df['CURRENT_JOB_YRS'] - df['CURRENT_JOB_YRS'].min()
+        #info['n_classes'][1] = info['n_classes'][1] +1
+        #df['Age'] = df['Age'] - df['Age'].min()
+        #df['CURRENT_HOUSE_YRS'] = df['CURRENT_HOUSE_YRS'] - df['CURRENT_HOUSE_YRS'].min()
+        #df['CURRENT_JOB_YRS'] = df['CURRENT_JOB_YRS'] - df['CURRENT_JOB_YRS'].min()
         info['col_dtype'] = {0:'float', 1:'int'}
 
 
@@ -127,7 +130,7 @@ def process(df,info,name):
     elif name == 'early_diab':
         N_CLASSES = {i: df[c].nunique() for i,c in enumerate(df.columns)}
         info['n_classes'] = N_CLASSES
-        df['Age'] = df['Age'] - df['Age'].min()
+        #df['Age'] = df['Age'] - df['Age'].min()
         info['n_classes'][0] = df.Age.max().astype('int')+1 
         info['num_col_idx'] = []
         info['cat_col_idx'].insert(0,0)
@@ -205,5 +208,6 @@ def save_scm(scm: dict, save_dir: str = "saved_scm", experiment: str = "default"
         }
 
     # Save metadata
+    scm_meta = {int(k): v for k,v in scm_meta.items()}
     with open(os.path.join(save_dir, f"{experiment}_scm_meta.json"), "w") as f:
         json.dump(scm_meta, f, indent=4,cls=NpEncoder)

@@ -83,11 +83,11 @@ class DiffusionRegressor:
         self.epochs = epochs
 
     def save(self, experiment, node):
-        os.makedirs(path, exist_ok=True)
+        os.makedirs(f'{experiment}', exist_ok=True)
 
         # Save model weights (if fitted)
         if self.model is not None:
-            torch.save(self.model.state_dict(), os.path.join(path, "model.pt"))
+            torch.save(self.model.state_dict(), os.path.join(f'{experiment}', "model.pt"))
 
         # Save config/state separately
         state = {
@@ -100,7 +100,7 @@ class DiffusionRegressor:
             "alpha_hat": self.alpha_hat.cpu().numpy() if self.alpha_hat is not None else None,
         }
 
-        with open(os.path.join(path, "state.pkl"), "wb") as f:
+        with open(os.path.join(f'{experiment}', "state.pkl"), "wb") as f:
             pickle.dump(state, f)
 
     def _postprocess_predictions(self,y_preds, min_val, max_val):

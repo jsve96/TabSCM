@@ -19,12 +19,12 @@ def get_num_classes(node:int,INFO) -> int:
 #  — Fit SCM from DAG
 
 
-def root_sampler_kde(values, bandwidth=0.05):
-    kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth)
-    kde.fit(values.reshape(-1, 1))
-    def sampler(n):
-        return kde.sample(n).flatten()
-    return sampler
+# def root_sampler_kde(values, bandwidth=0.05):
+#     kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth)
+#     kde.fit(values.reshape(-1, 1))
+#     def sampler(n):
+#         return kde.sample(n).flatten()
+#     return sampler
 
 
 # def root_sampler_categorical(values: np.ndarray):
@@ -38,6 +38,15 @@ def root_sampler_kde(values, bandwidth=0.05):
 #         return np.random.choice(classes, size=n, p=probs)
 
 #     return sampler
+
+
+class RootSamplerKDE:
+    def __init__(self, y, bandwidth=0.05):
+        self.kde = KernelDensity(kernel='gaussian', bandwidth=bandwidth)
+        self.kde.fit(np.asarray(y).reshape(-1, 1))
+
+    def __call__(self, n):
+        return self.kde.sample(n).flatten()
 
 
 
@@ -64,7 +73,7 @@ def fit_scm_from_dag(data: np.ndarray, dag: nx.DiGraph, INFO, device: str,**para
                 #sampler = root_sampler_categorical(y)
                 sampler = RootSamplerCategorical(y)
             else:
-                sampler = root_sampler_kde(y)
+                sampler = RootSamplerKDE(y)#root_sampler_kde(y)
             scm[node] = sampler
 
         else:
@@ -122,6 +131,7 @@ def sample_from_scm(scm, dag, n_samples, INFO) -> np.ndarray:
             #     data[:, node] = rejection_sample(sampler_fn, constraint, n_samples, max_retries)
             data[:, node] = sampler_fn.__call__(n_samples)
             if not isinstance(sampler_fn,RootSamplerCategorical):
+                print(node)
                 if INFO['col_dtype'][node] == 'int':
                     MIN = INFO['column_info'][str(node)]['min']
                     MAX = INFO['column_info'][str(node)]['max']

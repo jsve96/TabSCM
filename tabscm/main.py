@@ -34,14 +34,32 @@ def main(args):
     data = df.to_numpy().astype('float')
     
     if args.version == 'medium':
-        params_regressor = {
-            'timesteps' : 500,
-            'epochs' : 500
-        }
+        if dataname == 'heloc':
+            params_regressor = {
+                'timesteps' : 500,
+                'epochs' : 1000
+            }
+        elif dataname == 'loan':
+             params_regressor = {
+                'timesteps' : 1500,
+                'epochs' : 500
+            }
+        elif dataname == 'magic':
+            params_regressor = {
+                'timesteps' : 1500,
+                'epochs' : 500
+            }
+        else:
+            params_regressor = {
+                'timesteps' : 500,
+                'epochs' : 500
+            }
+
+    alpha = 0.01 if dataname!='loan' else 0.005
 
     start_time = time.time()
 
-    cg = infer_casual_graph(data,method=args.cd_alg)
+    cg = infer_casual_graph(data,method=args.cd_alg,alpha=alpha)
     sampled_dags = [graph_subgraph(cg) for _ in range(1)]
     final_dags = [check_missing_node(dag,df) for dag in sampled_dags]
     scm = fit_scm_from_dag(data,final_dags[0],info,args.device,**params_regressor)
@@ -70,9 +88,10 @@ def main(args):
     print(scm)
     save_scm(scm,f'{exp_save}/scm')
 
+
     save_dag = {'nodes':list(final_dags[0].nodes), 'edges': list(final_dags[0].edges)}
     with open(f'{exp_save}/dag/dag.json',"w") as f:
-        json.dump(save_dag,f,indent=4)
+        json.dump(save_dag,f,indent=4,cls=NpEncoder)
 
 
     print(scm)
