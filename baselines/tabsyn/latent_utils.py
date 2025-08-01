@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import torch
 from utils_train import preprocess
-from tabsyn.vae.model import Decoder_model 
+from baselines.tabsyn.vae.model import Decoder_model 
 
 def get_input_train(args):
     dataname = args.dataname

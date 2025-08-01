@@ -5,6 +5,7 @@ def execute_function(method, mode):
     if method == 'vae':
         mode = 'train'
     mode = 'main' if mode == 'train' else 'sample'
+    print(mode)
 
     if method == 'vae':
         module_name = f"baselines.tabsyn.vae.main"
@@ -14,8 +15,10 @@ def execute_function(method, mode):
         module_name = f"baselines.tabddpm.main_train" if mode == 'main' else f"baselines.tabddpm.main_sample"
     elif method == 'tabscm':
         module_name = f"tabscm.{mode}"
+
     else:
         module_name = f"baselines.{method}.{mode}"
+        #module_name = f"baselines.goggle.main"
 
     try:
         print('import moduels')
@@ -155,6 +158,10 @@ def get_args():
     parser.add_argument('--version', type=str, default='medium')
     parser.add_argument('--cd_alg', type=str,default='pc')
     parser.add_argument('--n_dag',type=int,default=1)
+    parser.add_argument('--ci_test', type=str, default='fisherz')
+    #parser.add_argument('--node', type=int,default=0,help='node to for intervention')
+    #parser.add_argument('--value',default=None, help='intervention value')
+    parser.add_argument('--intervention_config', type=str)
 
     args = parser.parse_args()
 

@@ -9,7 +9,7 @@ import json
 import argparse
 import warnings
 
-from tabsyn.latent_utils import recover_data
+from baselines.tabsyn.latent_utils import recover_data
 from utils_train import concat_y_to_X
 
 warnings.filterwarnings("ignore")

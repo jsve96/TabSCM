@@ -8,8 +8,8 @@ import warnings
 import time
 
 from tqdm import tqdm
-from tabsyn.model import MLPDiffusion, Model
-from tabsyn.latent_utils import get_input_train
+from baselines.tabsyn.model import MLPDiffusion, Model
+from baselines.tabsyn.latent_utils import get_input_train
 
 warnings.filterwarnings('ignore')
 
@@ -51,7 +51,7 @@ def main(args):
     model = Model(denoise_fn = denoise_fn, hid_dim = train_z.shape[1]).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=0)
-    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.9, patience=20, verbose=True)
+    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.9, patience=20)
 
     model.train()
 

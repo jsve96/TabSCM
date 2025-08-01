@@ -3,8 +3,13 @@ import torch
 from torch import nn
 
 # Goggle
+print('HERE')
 from baselines.goggle.model.Encoder import Encoder
+print('HERE1')
+
 from baselines.goggle.model.GraphDecoder import GraphDecoderHet, GraphDecoderHomo
+print('HERE2')
+
 from baselines.goggle.model.GraphInputProcessor import (
     GraphInputProcessorHet,
     GraphInputProcessorHomo,

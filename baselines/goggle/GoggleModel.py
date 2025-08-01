@@ -10,8 +10,11 @@ import torch
 from torch import optim
 
 # Goggle
+print('here 2')
 from baselines.goggle.data_utils import get_dataloader
+print('here3')
 from baselines.goggle.model.Goggle import Goggle
+print('her4')
 from baselines.goggle.model.GoggleLoss import GoggleLoss
 
 

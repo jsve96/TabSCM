@@ -28,8 +28,11 @@ def main(args):
             info = json.load(f)
 
     train_df = pd.read_csv(dataset_path)
+    if dataname == 'adult':
+        _,info,encoders,encoded_cols,inv_map = process(df=train_df,info = info,name=dataname)
+    else:
 
-    _,info,encoders,encoded_cols = process(df=train_df,info = info,name=dataname)
+        _,info,encoders,encoded_cols = process(df=train_df,info = info,name=dataname)
     print(info)
     ### load scm model
     #loaded_scm = load_tabscm()
@@ -37,6 +40,7 @@ def main(args):
     with open(f'{curr_dir}/models/{dataname}/dag/dag.json') as f:
         data_dag = json.load(f)
     loaded_dag = generate_dag_from_dict(data_dag)
+    print(loaded_dag.nodes)
 
     exp_save =  f'{curr_dir}/models/{dataname}'
     loaded_scm = load_scm(f'{exp_save}/scm',device='cuda')
@@ -51,13 +55,27 @@ def main(args):
 
     #### need to postprocess samples ---> convert with encoder
     samples_df = pd.DataFrame(samples,columns=info['column_names'])
-    print(samples_df.head())
+    #print(train_df.dtypes)
+    #print(samples_df.dtypes)
+    convert_dict = {train_df.columns[col]: train_df.dtypes[col] for col in range(train_df.shape[1])}
+    #samples_df = samples_df.astype(convert_dict)
 
     for col in encoded_cols:
         if col in encoders.keys():
             print(f'Column: {col}')
+            #samples_df.iloc[:, col] = samples_df.iloc[:, col].astype(train_df.dtypes[col])
+            #print(list(encoders[col].classes_))
             samples_df.iloc[:,col] = encoders[col].inverse_transform(samples_df.iloc[:,col].astype('int'))
+
+
+    if dataname == 'adult':
+        vals = samples_df['education'].apply(lambda x: inv_map[inv_map.index == x].values[0]).values
+        samples_df.insert(4,'education.num',vals)
+
+
+    samples_df = samples_df.astype(convert_dict)
     samples_df.to_csv(save_path, index = False)
+    print(samples_df.head())
 
 
     print('Saving sampled data to {}'.format(save_path))

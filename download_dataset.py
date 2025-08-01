@@ -40,7 +40,25 @@ def download_from_uci(name):
     else:
         print('Aready downloaded.')
 
+
+def download_from_sklearn(name):
+    save_dir = f'{DATA_DIR}/{name}'
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+        if name == 'housing':
+            from sklearn.datasets import fetch_california_housing
+            df = fetch_california_housing(as_frame=True).frame
+            df.to_csv(f'{save_dir}/housing.csv',header=True,index=False)
+        
+    else:
+        print('Aready downloaded.')
+
+
 if __name__ == '__main__':
     for name in NAME_URL_DICT_UCI.keys():
         download_from_uci(name)
+    download_from_sklearn('housing')
+    
+
     

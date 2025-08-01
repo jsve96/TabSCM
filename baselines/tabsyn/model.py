@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim
 from torch import Tensor
-from tabsyn.diffusion_utils import EDMLoss
+from baselines.tabsyn.diffusion_utils import EDMLoss
 
 ModuleType = Union[str, Callable[..., nn.Module]]
 

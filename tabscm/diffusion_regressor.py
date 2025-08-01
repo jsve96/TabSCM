@@ -242,8 +242,8 @@ class DiffusionRegressor:
         y_predictions = all_samples.reshape(n_original_samples, n_samples_per_x)
 
         y_mean = y_predictions.mean(axis=1)
-        
         if INFO['col_dtype'][node] == 'int':
+            print(node)
             MIN = INFO['column_info'][str(node)]['min']
             MAX = INFO['column_info'][str(node)]['max']
             return self._postprocess_predictions(y_mean, min_val=int(np.floor(MIN)), max_val=int(np.ceil(MAX)))

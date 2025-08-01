@@ -26,7 +26,6 @@ def main(args):
     Modification of configs
     '''
     print('START TRAINING')
-    
     train(
         **raw_config['train']['main'],
         **raw_config['diffusion_params'],

@@ -124,12 +124,14 @@ if __name__ == '__main__':
         dcr_test = (batch_syn_data_th[:, None] - test_data_th).abs().sum(dim = 2).min(dim = 1).values
         dcrs_real.append(dcr_real)
         dcrs_test.append(dcr_test)
+        #print(dcr_real.mean())
         
     dcrs_real = torch.cat(dcrs_real)
     dcrs_test = torch.cat(dcrs_test)
     
-    
     score = (dcrs_real < dcrs_test).nonzero().shape[0] / dcrs_real.shape[0]
     
+
+    print(f'Average dcrs_real = {torch.mean(dcr_real)}')
     print('DCR Score, a value closer to 0.5 is better')
     print(f'{dataname}-{model}, DCR Score = {score}')

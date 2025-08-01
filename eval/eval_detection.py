@@ -68,6 +68,7 @@ if __name__ == '__main__':
 
     dataname = args.dataname
     model = args.model
+    
 
     syn_path = f'synthetic/{dataname}/{model}.csv'
     real_path = f'synthetic/{dataname}/real.csv'

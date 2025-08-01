@@ -7,7 +7,7 @@ from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
-from sklearn.metrics import explained_variance_score, mean_squared_error, mean_absolute_error, r2_score
+from sklearn.metrics import explained_variance_score, mean_squared_error, mean_absolute_error, r2_score,root_mean_squared_error
 from sklearn.model_selection import ParameterGrid
 from sklearn.utils._testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
@@ -71,7 +71,7 @@ _MODELS = {
                  'gamma': [0.0, 1.0],
                  'objective': ['binary:logistic'],
                  'nthread': [-1],
-                 'tree_method': ['gpu_hist']
+                 'tree_method': ['hist']
             },
         }
 
@@ -113,7 +113,7 @@ _MODELS = {
                  'gamma': [0.0, 1.0],
                  'objective': ['binary:logistic'],
                  'nthread': [-1],
-                 'tree_method': ['gpu_hist']
+                 'tree_method': ['hist']
             }
         }
 
@@ -137,9 +137,9 @@ _MODELS = {
                  'min_child_weight': [1, 10], 
                  'max_depth': [5, 10, 20],
                  'gamma': [0.0, 1.0],
-                 'objective': ['reg:linear'],
+                 'objective': ['reg:squarederror'],
                  'nthread': [-1],
-                 'tree_method': ['gpu_hist']
+                 'tree_method': ['hist']
             }
         },
         # {
@@ -161,7 +161,6 @@ def feat_transform(data, info, label_encoder = None, encoders = None, cmax = Non
 
     num_cols = len(num_col_idx + cat_col_idx + target_col_idx)
     features = [] 
-    
     if not encoders:
         encoders = dict()
     for idx in range(num_cols):
@@ -201,10 +200,14 @@ def feat_transform(data, info, label_encoder = None, encoders = None, cmax = Non
         elif idx in cat_col_idx:
             encoder = encoders.get(idx)
             col = col.reshape(-1, 1)
+            #col = col.astype(np.float32)
             if encoder:
+                #print(type(col))
+                #print(col.astype('O').dtype)
                 feature = encoder.transform(col)
+                #print(feature)
             else:
-                encoder = OneHotEncoder(sparse=False, handle_unknown='ignore')
+                encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
                 encoders[idx] = encoder
                 feature = encoder.fit_transform(col)
                 
@@ -671,7 +674,7 @@ def _evaluate_regression(train, test, info):
             r2 = r2_score(y_valid, pred)
             explained_variance = explained_variance_score(y_valid, pred)
             mean_squared = mean_squared_error(y_valid, pred)
-            root_mean_squared = mean_squared_error(y_valid, pred, squared=False)
+            root_mean_squared = root_mean_squared_error(y_valid, pred)
             mean_absolute = mean_absolute_error(y_valid, pred)
 
             results.append(
@@ -704,7 +707,7 @@ def _evaluate_regression(train, test, info):
             r2 = r2_score(y_test, pred)
             explained_variance = explained_variance_score(y_test, pred)
             mean_squared = mean_squared_error(y_test, pred)
-            root_mean_squared = mean_squared_error(y_test, pred, squared=False)
+            root_mean_squared = root_mean_squared_error(y_test, pred)
             mean_absolute = mean_absolute_error(y_test, pred)
 
             best_scores.append(

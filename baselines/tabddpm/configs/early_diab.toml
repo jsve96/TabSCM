@@ -3,7 +3,7 @@ model_save_path = "ckpt/early_diab"
 sample_save_path = "sampled/early_diab"
 real_data_path = "Data/early_diab"
 
-num_numerical_features = 2
+num_numerical_features = 1
 model_type = "mlp"
 task_type = "binclass"
 

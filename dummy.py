@@ -1,8 +1,7 @@
-from baselines.tabsyn.vae import *
-import importlib
-
-import sys
-print(sys.path)
+import pandas as pd
 
 
-importlib.import_module('tabscm.main')
+
+df = pd.read_csv('/home/sven/coding/python/TabSCM/synthetic/beijing/real.csv')
+
+print(df.dtypes)

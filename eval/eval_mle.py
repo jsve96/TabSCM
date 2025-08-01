@@ -5,7 +5,10 @@ import os
 import sys
 
 import json
-from mle.mle import get_evaluator
+try:
+    from eval.mle.mle import get_evaluator
+except:
+    from mle.mle import get_evaluator
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import warnings

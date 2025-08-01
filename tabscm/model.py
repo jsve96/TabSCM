@@ -8,7 +8,10 @@ import networkx as nx
 
 
 def is_categorical(node: int,INFO) -> bool:
-    return node in INFO["cat_col_idx"] or node in INFO["target_col_idx"]
+    if INFO['task_type'] == 'binclass':
+        return node in INFO["cat_col_idx"] or node in INFO["target_col_idx"]
+    else:
+        return node in INFO["cat_col_idx"]
 
 def get_num_classes(node:int,INFO) -> int:
     return INFO['n_classes'][node]
@@ -80,10 +83,10 @@ def fit_scm_from_dag(data: np.ndarray, dag: nx.DiGraph, INFO, device: str,**para
             X = data[:, parents]
 
             if is_categorical(node,INFO):
-                #print(node)
+                print(node)
                 n_classes = get_num_classes(node,INFO)
-                #print(n_classes)
-                #print(np.unique(y))
+                print(n_classes)
+                print(np.unique(y))
                 dtrain = xgb.DMatrix(data[:,parents], label=y)
                 params = {
                     'num_class': n_classes,
@@ -131,7 +134,6 @@ def sample_from_scm(scm, dag, n_samples, INFO) -> np.ndarray:
             #     data[:, node] = rejection_sample(sampler_fn, constraint, n_samples, max_retries)
             data[:, node] = sampler_fn.__call__(n_samples)
             if not isinstance(sampler_fn,RootSamplerCategorical):
-                print(node)
                 if INFO['col_dtype'][node] == 'int':
                     MIN = INFO['column_info'][str(node)]['min']
                     MAX = INFO['column_info'][str(node)]['max']
@@ -151,6 +153,57 @@ def sample_from_scm(scm, dag, n_samples, INFO) -> np.ndarray:
             else:
                 sampled = model.predict(X_parents,node=node,INFO=INFO)
                 data[:, node] = sampled
+    
+
+    return data
+
+
+
+def sample_interventions_from_scm(scm, dag, n_samples,intervention, INFO) -> np.ndarray:
+    # interventions dict {node: value}
+    n_vars = len(scm)
+    data = np.zeros((n_samples, n_vars))
+
+    for node in tqdm(nx.topological_sort(dag),desc=f'Sampling each nodes'):
+        #print(f"sampling node {node}")
+        model_info = scm[node]
+
+        if callable(model_info):  # root sampler
+            sampler_fn = model_info
+           # print(f'root: {node}')
+            # if node in Constraints_reject:
+            #     constraint = Constraints_reject[node]
+            #     data[:, node] = rejection_sample(sampler_fn, constraint, n_samples, max_retries)
+            if node in intervention.keys():
+                data[:,node] = np.array([intervention[node]]*n_samples).flatten()
+            else:
+                data[:, node] = sampler_fn.__call__(n_samples)
+                if not isinstance(sampler_fn,RootSamplerCategorical):
+                    if INFO['col_dtype'][node] == 'int':
+                        MIN = INFO['column_info'][str(node)]['min']
+                        MAX = INFO['column_info'][str(node)]['max']
+                        data[:,node] = _postprocess_predictions(data[:,node], min_val=int(np.floor(MIN)), max_val=int(np.ceil(MAX)))
+
+        else:
+            model, parents, noise_std, n_classes = model_info
+            X_parents = data[:, parents]
+
+            if node in intervention.keys():
+                print(np.array([intervention[node]]*n_samples))
+                data[:,node] = np.array([intervention[node]]*n_samples).flatten()
+
+            else:
+
+                if is_categorical(node, INFO):
+                    dmatrix = xgb.DMatrix(X_parents)
+                    prob_preds = model.predict(dmatrix)
+                    sampled = np.array([np.random.choice(n_classes, p=probs) for probs in prob_preds])
+                    data[:, node] = sampled
+                    
+
+                else:
+                    sampled = model.predict(X_parents,node=node,INFO=INFO)
+                    data[:, node] = sampled
     
 
     return data
