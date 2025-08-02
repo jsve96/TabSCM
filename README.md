@@ -4,7 +4,7 @@
 generation using Structural Causal Models (SCMs) that
 combines causal reasoning with decision trees and diffusion models
 
-The file structure and setup is inspired by the official implementation of [TabSyn](https://github.com/amazon-science/tabsyn).
+The file structure and setup is taken and adopted from the official implementation of [TabSyn](https://github.com/amazon-science/tabsyn).
 
 ## Setup
 Tested with python 3.10.
@@ -113,6 +113,26 @@ The default save path is "synthetic/[NAME_OF_DATASET]/[METHOD_NAME].csv"
 
 We repeated this procedure and put each synthetic sample "smapleXX"  in "syn_data_samples/[NAME_OF_DATASET]/[NAME_OF_METHOD]/sampleXX.csv". It may be possible that you first need to set up the directory "syn_data_samples/[NAME_OF_DATASET]/[NAME_OF_METHOD]".
 
+## TabSCM Counterfactual Interventions
+
+TabSCM enable counterfactual reasoning which is the ability to ask what would have happened if a variable had taken a different value. This is done by explicitly modeling how variables in a system influence each other through causal mechanisms (i.e., functional assignments that describe how each variable is generated from its causes and some noise). The key idea is that by altering these mechanisms only for specific variables, we can simulate alternative, hypothetical ***counterfactual*** instances.
+
+Specify set (.json) of interventions for certains nodes. Here a minimal example for node:0,5,2
+```
+{
+    0: value0,
+    5: value5,
+    2: value2
+}
+```
+
+Then run 
+
+```
+python main.py --dataname [NAME_OF_DATASET] --method tabscm --mode intervene --save_path [PATH_TO_SAVE] --interventions [PATH_TO_INTERVENTION]
+```
+
+
 ## Evaluation
 We evaluate the quality of synthetic data using metrics from various aspects, we adopted the implementation provided in [TabSyn](https://github.com/amazon-science/tabsyn/tree/main).
 
@@ -143,3 +163,16 @@ Note: the optimal DCR score depends on the ratio between #Train and #Holdout (# 
 python eval_detection_final.py --dataname [NAME_OF_DATASET] --model [METHOD_NAME] --path [PATH_TO_SYNTHETIC_DATA_DIRECTORY]
 ```
 
+#### Alpha Precision and Beta Recall ([paper link](https://arxiv.org/abs/2102.08921))
+
+This implementation is based on [synthcity](https://github.com/vanderschaarlab/synthcity) follow the steps below to set up a conda environment
+
+```
+conda create -f environment_synthcity.yaml
+```
+- $\alpha$-preicison: the fidelity of synthetic data
+- $\beta$-recall: the diversity of synthetic data
+
+```
+(synthcity) python eval_quality_final.py --dataname [NAME_OF_DATASET] --model [METHOD_NAME] --path [PATH_TO_SYNTHETIC_DATA_DIRECTORY]
+```

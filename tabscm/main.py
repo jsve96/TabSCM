@@ -56,7 +56,7 @@ def main(args):
         elif dataname == 'magic':
             params_regressor = {
                 'timesteps' : 500,#2000,#1500,
-                'epochs' : 900#200#500
+                'epochs' : 200#200#500
             }
         elif dataname == 'housing':
             params_regressor = {
