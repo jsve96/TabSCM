@@ -16,5 +16,8 @@ Interventions/
 
 eval/density
 eval/mle
+home/
 
+__pycache__/
 
+workspace/

@@ -149,9 +149,9 @@ if __name__ == '__main__':
     Beta_Recall_all = qual_res['delta_coverage_beta_naive']
 
     save_dir = f'eval/quality/{dataname}'
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
+    # if not os.path.exists(save_dir):
+    #     os.makedirs(save_dir)
 
-    with open(f'{save_dir}/{model}.txt', 'w') as f:
-        f.write(f'{Alpha_Precision_all}\n')
-        f.write(f'{Beta_Recall_all}\n')
+    # with open(f'{save_dir}/{model}.txt', 'w') as f:
+    #     f.write(f'{Alpha_Precision_all}\n')
+    #     f.write(f'{Beta_Recall_all}\n')
