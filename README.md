@@ -4,7 +4,7 @@
 generation using Structural Causal Models (SCMs) that
 combines causal reasoning with decision trees and diffusion models
 
-The file structure and setup is taken and adopted from the official implementation of [TabSyn](https://github.com/amazon-science/tabsyn).
+The file structure and setup is taken and adapted from the official implementation of [TabSyn](https://github.com/amazon-science/tabsyn).
 
 ## Setup
 Tested with python 3.10.
