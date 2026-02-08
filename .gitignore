@@ -14,7 +14,9 @@ baselines/tabsyn/vae/ckpt
 baselines/causalTGAN/ckpts
 baselines/dcm/ckpts
 Ablation/
-Interventions/
+Interventions/adult
+Interventions/heloc
+Interventions/loan
 
 eval/density
 eval/mle
