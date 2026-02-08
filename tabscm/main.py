@@ -87,7 +87,8 @@ def main(args):
     else:
         alpha =0.1
         test = chisq
-    con =False
+    #con =False
+    con = True
     if con:
         cg = infer_casual_graph(data,method=args.cd_alg,alpha=alpha,test=test)
         print(cg)
@@ -105,9 +106,9 @@ def main(args):
                     final_dags[0].add_edge((6,7))
 
     ### comment out later
-    with open(f'{curr_dir}/models/{dataname}/dag/dag.json') as f:
-        data_dag = json.load(f)
-    final_dags = [generate_dag_from_dict(data_dag)]
+    # with open(f'{curr_dir}/models/{dataname}/dag/dag.json') as f:
+    #     data_dag = json.load(f)
+    #final_dags = [generate_dag_from_dict(data_dag)]
 
     scm = fit_scm_from_dag(data,final_dags[0],info,args.device,**params_regressor)
 

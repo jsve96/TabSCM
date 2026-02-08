@@ -109,6 +109,7 @@ def main(args):
 
 
     if args.save_path is None:
+        os.makedirs(f'./syn_data_eval/mle/{args.dataname}/{args.model}',exist_ok=True)
         result_df.to_csv(f'./syn_data_eval/mle/{args.dataname}/{args.model}/result.csv', index=False)
     else:
         result_df.to_csv(args.save_path, index=False)

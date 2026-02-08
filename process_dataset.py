@@ -164,6 +164,8 @@ def process_data(name):
 
             if name == 'loan':
                 data_df = data_df.drop(columns=['Id'])
+            if name =='churn':
+                data_df = data_df.drop(columns=['CustomerID'])
 
     elif info['file_type'] == 'xls':
         data_df = pd.read_excel(data_path, sheet_name='Data', header=1)

@@ -1,0 +1,2 @@
+age,workclass,education,marital.status,occupation,relationship,race,sex,hours.per.week,native.country
+35.0, Private, Masters, Married-spouse-absent, Protective-serv, Not-in-family, White, Male,40.0, United-States

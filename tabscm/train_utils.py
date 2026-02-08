@@ -186,13 +186,23 @@ def process(df,info,name):
 
         
     elif name == 'loan':
-        N_CLASSES = {i: int(df[c].max()+1) for i,c in enumerate(df.columns)}#{i: df[c].nunique() for i,c in enumerate(df.columns)}
+        N_CLASSES = {i: int(df[c].max()+1) for i,c in enumerate(df.columns)}
         info['n_classes'] = N_CLASSES
         #info['n_classes'][1] = info['n_classes'][1] +1
         #df['Age'] = df['Age'] - df['Age'].min()
         #df['CURRENT_HOUSE_YRS'] = df['CURRENT_HOUSE_YRS'] - df['CURRENT_HOUSE_YRS'].min()
         #df['CURRENT_JOB_YRS'] = df['CURRENT_JOB_YRS'] - df['CURRENT_JOB_YRS'].min()
         info['col_dtype'] = {0:'float', 1:'int'}
+
+    elif name == 'churn':
+        N_CLASSES = {i: int(df[c].max()+1) for i,c in enumerate(df.columns)}
+        info['n_classes'] = N_CLASSES
+        #info['n_classes'][1] = info['n_classes'][1] +1
+        #df['Age'] = df['Age'] - df['Age'].min()
+        #df['CURRENT_HOUSE_YRS'] = df['CURRENT_HOUSE_YRS'] - df['CURRENT_HOUSE_YRS'].min()
+        #df['CURRENT_JOB_YRS'] = df['CURRENT_JOB_YRS'] - df['CURRENT_JOB_YRS'].min()
+        info['col_dtype'] = {1:'float', 2:'float',9:'float',10:'float',13:'float'}
+    
 
 
 

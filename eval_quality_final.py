@@ -30,6 +30,7 @@ def preprocess_real_data(dataname):
 
     num_col_idx = info['num_col_idx']
     cat_col_idx = info['cat_col_idx']
+    print(cat_col_idx)
     target_col_idx = info['target_col_idx']
     if info['task_type'] == 'regression':
         num_col_idx += target_col_idx
@@ -44,7 +45,7 @@ def preprocess_real_data(dataname):
 
     encoder = OneHotEncoder()
     encoder.fit(cat_real_np)
-
+    print(cat_real_np)
     cat_real_oh = encoder.transform(cat_real_np).toarray()
 
     le_real_data = pd.DataFrame(np.concatenate((num_real_np, cat_real_oh), axis=1)).astype(float)
@@ -57,7 +58,7 @@ def preprocess_syn_data(filepath, info, encoder, num_col_idx, cat_col_idx,model_
     syn_data.columns = range(len(syn_data.columns))
 
     num_syn_data = syn_data[num_col_idx]
-    cat_syn_data = syn_data[cat_col_idx]
+    cat_syn_data = syn_data[cat_col_idx].astype(str)
     print(cat_syn_data)
     types = {}
     for dt,col in zip(cat_syn_data.dtypes,cat_syn_data.columns):

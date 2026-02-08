@@ -77,7 +77,7 @@ if __name__ == '__main__':
         syn_paths = [os.path.join(args.path, f) for f in os.listdir(args.path) if f.endswith('.csv')]
     else:
         syn_paths = [args.path]
-
+    print(syn_paths)
     real_path = f'synthetic/{dataname}/real.csv'
     data_dir = f'data/{dataname}' 
 

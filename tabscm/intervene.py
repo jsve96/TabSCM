@@ -13,7 +13,7 @@ from tabscm.sample_utils import *
 
 
 def main(args):
-
+    print('HELLO')
     dataname = args.dataname
  
     dataset_path = f'data/{dataname}/train.csv'
@@ -52,7 +52,7 @@ def main(args):
     with open(args.intervention_config) as f:
         config_inter = json.load(f)
     intervention = {int(k): v for k,v in config_inter.items()}
-    print(intervention)
+    print(f"INTERVETIONS {intervention}")
     for node in intervention.keys():
         if node in encoded_cols:
             print('HERE')

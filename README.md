@@ -139,7 +139,7 @@ We evaluate the quality of synthetic data using metrics from various aspects, we
 #### Density estimation of single column and pair-wise correlation ([link](https://docs.sdv.dev/sdmetrics/reports/quality-report/whats-included))
 
 ```
-python eval_final_density.py --dataname [NAME_OF_DATASET] --model [METHOD_NAME] --path [PATH_TO_SYNTHETIC_DATA_DIRECTORY]
+python eval_density_final.py --dataname [NAME_OF_DATASET] --model [METHOD_NAME] --path [PATH_TO_SYNTHETIC_DATA_DIRECTORY]
 ```
 
 

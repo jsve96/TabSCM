@@ -11,6 +11,8 @@ baselines/goggle/ckpt
 baselines/tabddpm/ckpt
 baselines/tabsyn/ckpt
 baselines/tabsyn/vae/ckpt
+baselines/causalTGAN/ckpts
+baselines/dcm/ckpts
 Ablation/
 Interventions/
 
@@ -21,3 +23,5 @@ home/
 __pycache__/
 
 workspace/
+
+*pdf

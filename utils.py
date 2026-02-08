@@ -4,7 +4,8 @@ import importlib
 def execute_function(method, mode):
     if method == 'vae':
         mode = 'train'
-    mode = 'main' if mode == 'train' else 'sample'
+    if method != 'tabscm':
+        mode = 'main' if mode == 'train' else 'sample'
     print(mode)
 
     if method == 'vae':
